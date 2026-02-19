@@ -7,7 +7,6 @@ import { CommonService } from '../../../services/common.service';
 import { NoWhitespaceDirective } from '../../../validators';
 import { TableComponent } from '../../shared/table/table.component';
 import { SubmitButtonComponent } from '../../shared/submit-button/submit-button.component';
-
 @Component({
   selector: 'app-cms-features',
   standalone: true,

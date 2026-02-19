@@ -5,8 +5,8 @@
                         <span class="bi bi-calendar-event text-3xl"></span>
                   </div>
                   <div>
-                        <h4 class="text-xl font-bold">25</h4>
-                        <p class="text-md text-gray-400">Total Projects</p>
+                        <h4 class="text-xl font-bold m-0">0</h4>
+                        <p class="text-md text-gray-400">Total Active Projects</p>
                   </div>
             </div>
             <div class="card flex items-center gap-3">
@@ -14,8 +14,8 @@
                         <span class="bi bi-ticket-perforated text-3xl"></span>
                   </div>
                   <div>
-                        <h4 class="text-xl font-bold">10+</h4>
-                        <p class="text-md text-gray-400">Total Running Projects</p>
+                        <h4 class="text-xl font-bold m-0">{{dashboardData.userProjectDrafts}}</h4>
+                        <p class="text-md text-gray-400">Total Projects</p>
                   </div>
             </div>
             <div class="card flex items-center gap-3">
@@ -23,7 +23,7 @@
                         <span class="bi bi-people-fill text-3xl"></span>
                   </div>
                   <div>
-                        <h4 class="text-xl font-bold">500+</h4>
+                        <h4 class="text-xl font-bold m-0">{{dashboardData.userCount}}</h4>
                         <p class="text-md text-gray-400">Total Users</p>
                   </div>
             </div>
@@ -32,37 +32,68 @@
                         <span class="bi bi-cash-stack text-3xl"></span>
                   </div>
                   <div>
-                        <h4 class="text-xl font-bold">5999986</h4>
-                        <p class="text-md text-gray-400">Total Revenue</p>
+                        <h4 class="text-xl font-bold m-0">0</h4>
+                        <p class="text-md text-gray-400">Total Revenue Generated</p>
                   </div>
             </div>
       </section>
-      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-5">
+      <section class="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-5">
             <!-- Total Users Chart -->
-            <div class="card p-5 shadow rounded-2xl bg-white">
+            <div class="card p-5 shadow rounded-2xl bg-white col-span-3">
                   <div class="flex justify-between items-center mb-4">
                         <h5 class="text-lg font-semibold">Total Users</h5>
                         <div class="flex gap-2">
-                              <button *ngFor="let option of filterOptions"
-                                    class="px-3 py-1 text-sm rounded-lg border border-gray-300 hover:bg-violet-100 transition"
-                                    [class.bg-violet-600]="activeFilter === option"
-                                    [class.text-white]="activeFilter === option" (click)="filterChart(option)">
-                                    {{ option | titlecase }}
-                              </button>
+                              <nz-select class="form-control w-full" [(ngModel)]="selectedYear"
+                                    [ngModelOptions]="{standalone: true}" (ngModelChange)="getAllUsersChart()">
+                                    <nz-option [nzValue]="2025" [nzLabel]="2025"></nz-option>
+                                    <nz-option [nzValue]="2024" [nzLabel]="2024"></nz-option>
+                                    <nz-option [nzValue]="2023" [nzLabel]="2023"></nz-option>
+                                    <nz-option [nzValue]="2022" [nzLabel]="2022"></nz-option>
+                                    <nz-option [nzValue]="2021" [nzLabel]="2021"></nz-option>
+                              </nz-select>
+                              <nz-select class="form-control w-full custom_select_month" [(ngModel)]="selectedMonth"
+                                    [ngModelOptions]="{standalone: true}" (ngModelChange)="getAllUsersChart()">
+                                    <nz-option [nzValue]="1" [nzLabel]="'Jan'"></nz-option>
+                                    <nz-option [nzValue]="2" [nzLabel]="'Feb'"></nz-option>
+                                    <nz-option [nzValue]="3" [nzLabel]="'Mar'"></nz-option>
+                                    <nz-option [nzValue]="4" [nzLabel]="'Apr'"></nz-option>
+                                    <nz-option [nzValue]="5" [nzLabel]="'May'"></nz-option>
+                                    <nz-option [nzValue]="6" [nzLabel]="'Jun'"></nz-option>
+                                    <nz-option [nzValue]="7" [nzLabel]="'Jul'"></nz-option>
+                                    <nz-option [nzValue]="8" [nzLabel]="'Aug'"></nz-option>
+                                    <nz-option [nzValue]="9" [nzLabel]="'Sep'"></nz-option>
+                                    <nz-option [nzValue]="10" [nzLabel]="'Oct'"></nz-option>
+                                    <nz-option [nzValue]="11" [nzLabel]="'Nov'"></nz-option>
+                                    <nz-option [nzValue]="12" [nzLabel]="'Dec'"></nz-option>
+                              </nz-select>
                         </div>
                   </div>
 
-                  <ngx-charts-line-chart [view]="[550,300]" [scheme]="colorScheme" [results]="userChartData"
-                        [gradient]="false" [xAxis]="true" [yAxis]="true" [legend]="false" [animations]="true">
-                  </ngx-charts-line-chart>
+                  <div class="w-full max-w-full h-72">
+                        <ngx-charts-line-chart [scheme]="colorScheme" [results]="userChartData" [xAxis]="true"
+                              [yAxis]="true">
+                        </ngx-charts-line-chart>
+                  </div>
             </div>
 
             <!-- Total Revenue Chart -->
-            <div class="card p-5 shadow rounded-2xl bg-white">
-                  <h5 class="text-lg font-semibold mb-4">Total Revenue</h5>
-                  <ngx-charts-bar-vertical [view]="[550,300]" [scheme]="colorSchemeRevenue" [results]="revenueChartData"
-                        [gradient]="false" [xAxis]="true" [yAxis]="true" [legend]="false" [animations]="true">
-                  </ngx-charts-bar-vertical>
+            <div class="card p-5 shadow rounded-2xl bg-white col-span-2">
+                  <div class="flex justify-between items-center mb-4">
+                        <h5 class="text-lg font-semibold mb-4">Total Revenue (INR)</h5>
+                        <nz-select class="form-control w-24" [(ngModel)]="selectedYear"
+                              [ngModelOptions]="{standalone: true}" (ngModelChange)="loadRevenueData()">
+                              <nz-option [nzValue]="2025" [nzLabel]="2025"></nz-option>
+                              <nz-option [nzValue]="2024" [nzLabel]="2024"></nz-option>
+                              <nz-option [nzValue]="2023" [nzLabel]="2023"></nz-option>
+                              <nz-option [nzValue]="2022" [nzLabel]="2022"></nz-option>
+                              <nz-option [nzValue]="2021" [nzLabel]="2021"></nz-option>
+                        </nz-select>
+                  </div>
+                  <div class="w-full max-w-full h-72">
+                        <ngx-charts-line-chart [scheme]="colorSchemeRevenue" [results]="revenueChartData" [xAxis]="true"
+                              [yAxis]="true">
+                        </ngx-charts-line-chart>
+                  </div>
             </div>
       </section>
 </div>

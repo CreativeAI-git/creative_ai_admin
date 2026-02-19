@@ -48,7 +48,7 @@ app-sidebar[aria-expanded="false"] .brand {
     @apply text-[#1b83c1]
 }
 
-.menu-item:hover {
+.menu-item:hover, .menu-item.active {
     @apply bg-[#c7e5f4] text-[#1b83c1]
 }
 

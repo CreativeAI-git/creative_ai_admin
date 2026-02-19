@@ -8,7 +8,7 @@ import {
   Output,
   ViewEncapsulation
 } from '@angular/core';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SidebarCollapseDirective } from './sidebar-collapse.directive';
 
@@ -18,7 +18,7 @@ import { SidebarCollapseDirective } from './sidebar-collapse.directive';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
   standalone: true,
-  imports: [SidebarCollapseDirective, RouterLink],
+  imports: [SidebarCollapseDirective, RouterLink, RouterLinkActive],
   encapsulation: ViewEncapsulation.None
 })
 
