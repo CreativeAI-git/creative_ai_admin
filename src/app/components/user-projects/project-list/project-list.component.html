@@ -15,29 +15,12 @@
                     <tr>
                         <th>S No.</th>
                         <th>Project Name</th>
-                        <th>Current Routes</th>
-                        <th>Durations</th>
-                        <!-- <th>Features Cost</th> -->
-                        <th>No Of Features</th>
-                        <!-- <th>Cost Delivery</th> -->
-                        <th>Platforms</th>
-                        <th>Development Speed</th>
-                        <th>Currency Code</th>
-                        <!-- <th>Logo Size</th> -->
+                        <th>Current Page Step</th>
                         <th>Payment Plan</th>
-                        <th>Design Url</th>
-                        <th>Installment Type</th>
-                        <!-- <th>Tax Amount</th>
-                        <th>Discount Dost</th>
-                        <th>Final Cost</th> -->
-                        <!-- <th>Security Deposit</th>
-                        <th>Remaining Cost</th> -->
                         <th>Payment Status</th>
-                        <th>Currency Rate</th>
-                        <th>Created At</th>
                         <th>Project Status</th>
-                        <th>Billing Details</th>
                         <th>Project Features</th>
+                        <th>Created At</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -47,7 +30,7 @@
                     </tr>
                     <tr *ngFor="let item of filteredData; let i = index">
                         <td>{{i+1}}</td>
-                        <td>{{item.clientProjectName || '-'}}</td>
+                        <td>{{item.clientProjectName || '-'}}- {{item.project_type}}</td>
                         <td>
                             @if(item.currentRoutes == "/payment-plan"){
                             Payment-Plan
@@ -67,26 +50,16 @@
                             @else if(item.currentRoutes == "/billing-details"){
                             Billing Details
                             }
+                            @else if(item.currentRoutes.includes('ai-preview')){
+                            AI Preview Page
+                            }
                             @else {
                             -
                             }
                         </td>
-                        <td>{{item.durations || '-'}}</td>
-                        <!-- <td>{{item.features_cost || '-'}}</td> -->
-                        <td>{{item.no_of_features || '-'}}</td>
-                        <!-- <td>{{item.total_cost_delivery || '-'}}</td> -->
-                        <td>{{item.platforms || '-'}}</td>
-                        <td>{{item.development_speed || '-'}}</td>
-                        <td>{{item.client_currency_code || '-'}}</td>
-                        <!-- <td>{{item.logoSize || '-'}}</td> -->
+                       
                         <td>{{item.payment_plan || '-'}}</td>
-                        <td>{{item.design_url || '-'}}</td>
-                        <td>{{item.installment_type || '-'}}</td>
-                        <!-- <td>{{item.tax_amount || '-'}}</td>
-                        <td>{{item.discount_cost || '-'}}</td>
-                        <td>{{item.final_cost_with_tax_discount || '-'}}</td> -->
-                        <!-- <td>{{item.security_deposit || '-'}}</td>
-                        <td>{{item.remaining_cost || '-'}}</td> -->
+                    
                         <td>
                             @if(item.payment_status == '0'){
                             Draft
@@ -94,18 +67,17 @@
                             Paid
                             }
                         </td>
-                        <td>{{item.currency_rate || '-'}}</td>
-                        <td>{{item.createdAt | date:'dd-MMM-yyyy'}}</td>
                         <td>
                             @if(item.projectStatus == '0'){
-                            Pending
+                                Pending
                             } @else {
-                            Paid
+                                Paid
                             }
-                        </td>
-                        <td (click)="onViewBilling(item.billing_details)"><i class="bi bi-receipt"></i></td>
+                        </td>   
+                        <!-- <td (click)="onViewBilling(item.billing_details)"><i class="bi bi-receipt"></i></td> -->
                         <td (click)="onViewFeatures(item.projectFeatures)"><i class="bi bi-gear-wide-connected"></i>
                         </td>
+                        <td>{{item.createdAt | date:'dd-MMM-yyyy'}}</td>
                         <td (click)="onViewCosting(item)"><i class="bi bi-eye"></i></td>
                     </tr>
                 </tbody>
@@ -234,13 +206,11 @@
                                 <h3 class="text-lg font-semibold text-gray-800 mb-1">
                                     {{ feature.featureName }}
                                 </h3>
-                                <p class="text-sm text-gray-600 mb-2">
-                                    <b>Total Time:</b> {{ feature.featureTime }} hrs
-                                </p>
+                            
 
                                 <ul class="list-disc pl-5 text-sm text-gray-700">
                                     <li *ngFor="let sub of feature.subFeatures">
-                                        {{ sub.subFeatureName }} ({{ sub.estimated_time }} hrs)
+                                        {{ sub.subFeatureName }}
                                     </li>
                                 </ul>
                             </div>

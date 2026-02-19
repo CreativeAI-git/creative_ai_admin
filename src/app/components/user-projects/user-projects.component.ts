@@ -31,6 +31,8 @@ export class UserProjectsComponent {
       { field: 'name', header: 'Name' },
       { field: 'email', header: 'Email', },
       { field: 'country_code', field2: 'phoneNumber', header: 'Phone No.', combine: true },
+      { field: 'is_project_created', header: 'Is Project Created', color:true },
+      { field: 'active_plan', header: 'Active Plan'},
       { field: 'createdAt', pipe: 'date', header: 'Registered on', combine: true },
       { field: 'action', header: 'Action', isView: true, isFeatures: true },
     ]

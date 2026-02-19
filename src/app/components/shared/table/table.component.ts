@@ -30,7 +30,8 @@ export class TableComponent {
     isView?: boolean;
     isFeatures?: boolean;
     isAlbum?: boolean;
-    combine?:boolean
+    combine?:boolean;
+    color?:boolean
   }[] = [];
   @Input() pageSizeOptions: number[] = [10, 20, 25];
   @Input() projectId?: any
