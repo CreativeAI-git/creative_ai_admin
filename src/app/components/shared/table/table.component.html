@@ -82,9 +82,17 @@
 
                                                 <!-- Normal field display -->
                                                 <p class="mb-0"
-                                                      *ngIf="col.field && !col.pipe && !col.isArray && !col.combine  && col.field !== 'action'"
+                                                      *ngIf="col.field && !col.color && !col.pipe && !col.isArray && !col.combine  && col.field !== 'action'"
                                                       [ngClass]="col.addClass">
                                                       {{ row[col.field] || 'N/A' }}
+                                                </p>
+                                                <!-- Color field display -->
+                                                <p class="mb-0"
+                                                      *ngIf="col.field && col.color && !col.pipe && !col.isArray && !col.combine  && col.field !== 'action'"
+                                                      [ngClass]="col.addClass" [ngStyle]="{ 
+                                                            'color': row[col.field] === 'YES' ? 'green' : 'red' 
+                                                          }" >
+                                                      {{ row[col.field ] || 'N/A' }}
                                                 </p>
 
 
