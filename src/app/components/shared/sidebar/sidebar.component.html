@@ -1,7 +1,7 @@
 <aside>
     <div class="brand-wrapper">
-        <a routerLink="/" class="brand text-center">
-            <img src="assets/images/cti_black_logo.svg" alt="Logo" class="w-4/5">
+        <a routerLink="/admin/dashboard" class="brand text-center">
+            <img src="assets/images/cti_black_logo1.png" alt="Logo" class="w-4/5">
         </a>
     </div>
     <ul class="menu-links">
@@ -11,16 +11,16 @@
                 <span>Dashboard</span>
             </a>
         </li>
-        <li>
+        <!-- <li>
             <a routerLink="/admin/teams" class="menu-item" routerLinkActive="active" ariaCurrentWhenActive="page">
                 <i class="bi bi-microsoft-teams"></i>
                 Team </a>
-        </li>
+        </li> -->
         <li>
             <a routerLink="/admin/user_buider_projects" class="menu-item" routerLinkActive="active"
                 ariaCurrentWhenActive="page">
-                <i class="bi bi-question-circle"></i>
-                User Builder Projects </a>
+                <i class="bi bi-people"></i>
+                Clients</a>
         </li>
         <li>
             <a routerLink="/admin/projects" class="menu-item" routerLinkActive="active" ariaCurrentWhenActive="page">
@@ -67,7 +67,7 @@
                 </li>
             </ul>
         </li> -->
-        <li>
+        <!-- <li>
             <a href="javascript:void(0)" class="menu-item sub-menu" aria-expanded="false"
                 (click)="subMenuToggleHandler($event)">
                 <i class="bi bi-sliders2-vertical"></i>
@@ -79,7 +79,7 @@
                         <span>Profile</span>
                     </a>
                 </li>
-                <!-- <li>
+                <li>
                     <a class="menu-item"
                         [routerLink]="commonServices.prepareRoute(appRoutes.Admin, adminRoutes.Settings, settingRoutes.Users)"
                         routerLinkActive="active" ariaCurrentWhenActive="page">
@@ -90,9 +90,9 @@
                     <a href="#" class="menu-item" ariaCurrentWhenActive="page">
                         <span>Website</span>
                     </a>
-                </li> -->
+                </li>
             </ul>
-        </li>
+        </li> -->
         <li>
             <a href="javascript:void(0)" class="menu-item sub-menu" aria-expanded="false"
                 (click)="subMenuToggleHandler($event)">
@@ -111,7 +111,8 @@
                         ariaCurrentWhenActive="page">
                         <span> Builder Features</span>
                     </a>
-                    <a routerLink="blog-management" routerLinkActive="active" class="menu-item" ariaCurrentWhenActive="page">
+                    <a routerLink="blog-management" routerLinkActive="active" class="menu-item"
+                        ariaCurrentWhenActive="page">
                         <!-- <i class="bi bi-file-post"></i> -->
                         <span>Blog Management</span>
                     </a>
@@ -119,12 +120,12 @@
             </ul>
         </li>
         <li>
-           
+
         </li>
     </ul>
 </aside>
 
-<div class="collapsible-btn-container">
+<!-- <div class="collapsible-btn-container">
     <button id="sidebar-collapse-btn" sidebarCollapse>
         <div class="w-6 h-16 flex justify-center items-center">
             <div class="collapsible-icons">
@@ -133,4 +134,4 @@
             </div>
         </div>
     </button>
-</div>
+</div> -->

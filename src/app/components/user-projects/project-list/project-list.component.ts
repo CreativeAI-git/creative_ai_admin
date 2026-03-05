@@ -133,5 +133,31 @@ export class ProjectListComponent {
     this.costingData = item;
   }
 
+  expandedIndex: number | null = null;
 
+  toggleDetails(index: number) {
+    if (this.expandedIndex === index) {
+      this.expandedIndex = null;
+    } else {
+      this.expandedIndex = index;
+    }
+  }
+
+  checkRoute(route: string): string {
+    if (!route) return '-';
+
+    if (route.includes('make-it-mine')) {
+      return 'Feature Selection Screen';
+    }
+
+    if (route.includes('ai-preview')) {
+      return 'Ai Preview';
+    }
+
+    return '-';
+  }
+
+  parseData(data: any) {
+    return JSON.parse(data)
+  }
 }

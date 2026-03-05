@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { Color, LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { CommonService } from '../../services/common.service';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { FormsModule } from "@angular/forms";
+
 interface ChartData {
   name: string;
   value?: number;
@@ -17,22 +18,22 @@ interface ChartData {
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  colorScheme: Color = {
+  colorSchemeRevenue: Color = {
     name: 'users',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#6d28d9'],
+    domain: ['#2563eb']
   };
-
-  colorSchemeRevenue: Color = {
+  legendPosition = LegendPosition.Below;
+  statusColorScheme: Color = {
     name: 'revenue',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#0e7490'],
+    domain: ['#22c55e', '#facc15', '#3b82f6']
   };
 
-  userChartData: ChartData[] = [];
   revenueChartData: ChartData[] = [];
+  projectStatusData: ChartData[] = [];
   dashboardData: any = {};
   selectedYear: number = new Date().getFullYear();
   selectedMonth: number = new Date().getMonth() + 1;
@@ -46,7 +47,7 @@ export class DashboardComponent {
   }
 
   getDashboardData() {
-    this.service.get('getUserDashboardCounts').subscribe((res: any) => {
+    this.service.get('getDashboardData').subscribe((res: any) => {
       if (res.success) {
         this.dashboardData = res.data;
       }
@@ -54,17 +55,20 @@ export class DashboardComponent {
   }
   getAllUsersChart() {
     let formData = {
-      month: this.selectedMonth,
       year: this.selectedYear
     }
-    this.service.postAPI('getRegistedUserGraph', formData).subscribe((res: any) => {
+    this.service.postAPI('getAdminYearlyRevenue', formData).subscribe((res: any) => {
       if (res.success) {
-        // this.userChartData = res.data;
-        this.userChartData = [
+        this.revenueChartData = [
           {
-            name: 'Users',
-            series: res.data,
-          },
+            name: 'Revenue (₹)',
+            series: res.data.map((item: any) => {
+              return {
+                name: item.month,
+                value: item.revenue
+              }
+            })
+          }
         ];
       }
     });
@@ -126,24 +130,11 @@ export class DashboardComponent {
 
 
   loadRevenueData() {
-    this.revenueChartData = [
-      {
-        name: 'Revenue',
-        series: [
-          { name: 'Jan', value: 8000 },
-          { name: 'Feb', value: 30000 },
-          { name: 'Mar', value: 28000 },
-          { name: 'Apr', value: 15000 },
-          { name: 'May', value: 37000 },
-          { name: 'Jun', value: 39000 },
-          { name: 'Jul', value: 21000 },
-          { name: 'Aug', value: 43000 },
-          { name: 'Sep', value: 45000 },
-          { name: 'Oct', value: 51000 },
-          { name: 'Nov', value: 49000 },
-          { name: 'Dec', value: 26000 },
-        ],
-      },
+
+    this.projectStatusData = [
+      { name: 'Active', value: 35 },
+      { name: 'Pending', value: 15 },
+      { name: 'Completed', value: 50 }
     ];
   }
 }

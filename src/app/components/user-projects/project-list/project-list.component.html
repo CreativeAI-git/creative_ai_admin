@@ -1,9 +1,9 @@
 <div class="card p-5">
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center relative">
         <div class="card-title">
             <h3 class="text-xl font-bold leading-none">Projects</h3>
         </div>
-        <div class="absolute right-28">
+        <div class="absolute right-0">
             <input type="text" placeholder="Search..." [(ngModel)]="searchText" (input)="filterTable()"
                 class="search-input border border-gray-300 rounded-md px-2 py-1 focus:outline-none">
         </div>
@@ -14,100 +14,87 @@
                 <thead class="bg-gray-50 sticky top-0">
                     <tr>
                         <th>S No.</th>
-                        <th>Project Name</th>
-                        <th>Current Routes</th>
-                        <th>Durations</th>
-                        <!-- <th>Features Cost</th> -->
-                        <th>No Of Features</th>
-                        <!-- <th>Cost Delivery</th> -->
-                        <th>Platforms</th>
-                        <th>Development Speed</th>
-                        <th>Currency Code</th>
-                        <!-- <th>Logo Size</th> -->
-                        <th>Payment Plan</th>
-                        <th>Design Url</th>
-                        <th>Installment Type</th>
-                        <!-- <th>Tax Amount</th>
-                        <th>Discount Dost</th>
-                        <th>Final Cost</th> -->
-                        <!-- <th>Security Deposit</th>
-                        <th>Remaining Cost</th> -->
-                        <th>Payment Status</th>
-                        <th>Currency Rate</th>
-                        <th>Created At</th>
-                        <th>Project Status</th>
-                        <th>Billing Details</th>
-                        <th>Project Features</th>
+                        <th>Project</th>
+                        <th>Project Type</th>
+                        <th>Current Screen</th>
+                        <th>Deployed</th>
+                        <th>Created On</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
+
+                    <!-- No Data -->
                     <tr *ngIf="filteredData?.length == 0">
-                        <td colspan="8" class="text-center">No project found</td>
+                        <td colspan="20" class="text-center py-6 text-gray-500">
+                            No project found
+                        </td>
                     </tr>
-                    <tr *ngFor="let item of filteredData; let i = index">
-                        <td>{{i+1}}</td>
-                        <td>{{item.clientProjectName || '-'}}</td>
-                        <td>
-                            @if(item.currentRoutes == "/payment-plan"){
-                            Payment-Plan
-                            }
-                            @else if(item.currentRoutes == "/choose-base"){
-                            Choose Base
-                            }
-                            @else if(item.currentRoutes == "/make-it-mine"){
-                            Make it Mine
-                            }
-                            @else if(item.currentRoutes == "/refine-idea"){
-                            Refine Idea
-                            }
-                            @else if(item.currentRoutes == "/review-buildcard"){
-                            Review Buildcard
-                            }
-                            @else if(item.currentRoutes == "/billing-details"){
-                            Billing Details
-                            }
-                            @else {
-                            -
-                            }
-                        </td>
-                        <td>{{item.durations || '-'}}</td>
-                        <!-- <td>{{item.features_cost || '-'}}</td> -->
-                        <td>{{item.no_of_features || '-'}}</td>
-                        <!-- <td>{{item.total_cost_delivery || '-'}}</td> -->
-                        <td>{{item.platforms || '-'}}</td>
-                        <td>{{item.development_speed || '-'}}</td>
-                        <td>{{item.client_currency_code || '-'}}</td>
-                        <!-- <td>{{item.logoSize || '-'}}</td> -->
-                        <td>{{item.payment_plan || '-'}}</td>
-                        <td>{{item.design_url || '-'}}</td>
-                        <td>{{item.installment_type || '-'}}</td>
-                        <!-- <td>{{item.tax_amount || '-'}}</td>
-                        <td>{{item.discount_cost || '-'}}</td>
-                        <td>{{item.final_cost_with_tax_discount || '-'}}</td> -->
-                        <!-- <td>{{item.security_deposit || '-'}}</td>
-                        <td>{{item.remaining_cost || '-'}}</td> -->
-                        <td>
-                            @if(item.payment_status == '0'){
-                            Draft
-                            } @else {
-                            Paid
-                            }
-                        </td>
-                        <td>{{item.currency_rate || '-'}}</td>
-                        <td>{{item.createdAt | date:'dd-MMM-yyyy'}}</td>
-                        <td>
-                            @if(item.projectStatus == '0'){
-                            Pending
-                            } @else {
-                            Paid
-                            }
-                        </td>
-                        <td (click)="onViewBilling(item.billing_details)"><i class="bi bi-receipt"></i></td>
-                        <td (click)="onViewFeatures(item.projectFeatures)"><i class="bi bi-gear-wide-connected"></i>
-                        </td>
-                        <td (click)="onViewCosting(item)"><i class="bi bi-eye"></i></td>
-                    </tr>
+                    <!-- Data Row -->
+                    <ng-container *ngFor="let item of filteredData; let i = index">
+                        <!-- Main Row -->
+                        <tr>
+                            <td class="text-center">{{i+1}}</td>
+                            <td class="text-center">{{item.clientProjectName || '-'}}</td>
+                            <td class="text-center">{{item.project_type || '-'}}</td>
+                            <td class="text-center">{{checkRoute(item.currentRoutes) || '-'}}</td>
+                            <td class="text-center">{{item.deployed || '-'}}</td>
+                            <td class="text-center">{{(item.createdAt | date) || '-'}}</td>
+                            <td class="text-center">
+                                @if(item.projectStatus == '0'){
+                                <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">Draft</span>
+                                } @else {
+                                <span
+                                    class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">Completed</span>
+                                }
+                            </td>
+
+                            <td class="cursor-pointer text-indigo-600 text-center" (click)="toggleDetails(i)">
+                                <i class="bi" [ngClass]="expandedIndex === i ? 'bi-chevron-up' : 'bi-chevron-down'">
+                                </i>
+                            </td>
+                        </tr>
+
+                        <!-- Expandable Row -->
+                        <tr *ngIf="expandedIndex === i">
+                            <td colspan="20" class="bg-gray-50 p-6">
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+
+                                    <!-- Project Features -->
+                                    <div class="bg-white p-4 rounded-lg border feature-div">
+                                        <h4 class="font-semibold mb-3">Project Features</h4>
+                                        <ul class="list-disc pl-5 text-sm space-y-1">
+                                            <li *ngFor="let feature of parseData(item.projectFeatures)">
+                                                <span class="font-bold">{{feature.featureName}}</span>
+                                                <ul class="list-disc pl-5 text-sm space-y-1">
+                                                    <li *ngFor="let subfeature of feature.subFeatures">
+                                                        {{subfeature.subFeatureName}}
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Billing Details -->
+                                    <div class="bg-white p-4 rounded-lg border feature-div">
+                                        <h4 class="font-semibold mb-3">Additional Features</h4>
+                                        <ul class="list-disc pl-5 text-sm space-y-1">
+                                            <li *ngFor="let feature of parseData(item.additionalFeatures)">
+                                                <span class="font-bold">{{feature.featureName}}</span>
+                                                <ul class="list-disc pl-5 text-sm space-y-1">
+                                                    <li *ngFor="let subfeature of feature.subFeatures">
+                                                        {{subfeature.subFeatureName}}
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </table>
         </div>

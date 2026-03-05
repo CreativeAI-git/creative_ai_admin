@@ -1,94 +1,133 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NoWhitespaceDirective } from '../../validators';
 import { CommonModule } from '@angular/common';
-import { TableComponent } from '../shared/table/table.component';
-import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment.development';
+import { debounce } from 'lodash';
 
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, TableComponent],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css'
 })
 export class ProjectsComponent {
-  Form!: FormGroup;
-  loading: boolean = false
-  columns: any[] = []
+  imageUrl = environment.imageUrl
+  userId: any;
   url: string = ''
-  constructor(private service: CommonService, private toastr: NzMessageService, private router: Router) {
-    this.initForm()
+  showBillingModal: boolean = false;
+  showCostingModal: boolean = false;
+  showFeaturesModal: boolean = false;
+  searchText: string = '';
+  pagedData: any[] = [];
+  totalRecords = 0;
+  currentPage = 1;
+  pageSizeOptions: number[] = [10, 25, 50, 100];
+  pageSize = this.pageSizeOptions[0];
+  isLoading: boolean = false;
+  constructor(private service: CommonService) {
+
   }
 
-  ngOnInit(): void {
-    // this.getData()
+  ngOnInit() {
+    this.getData();
   }
 
-  initForm() {
-    this.Form = new FormGroup({
-      project_name: new FormControl('', [Validators.required, NoWhitespaceDirective.validate]),
-      project_description: new FormControl('', [Validators.required, NoWhitespaceDirective.validate]),
-      client_name: new FormControl('', [Validators.required, NoWhitespaceDirective.validate]),
-      start_date: new FormControl('', [Validators.required, NoWhitespaceDirective.validate]),
-      end_date: new FormControl('', [Validators.required, NoWhitespaceDirective.validate]),
-      priority: new FormControl('', [Validators.required])
-    })
-  }
+  tableData: any;
+  billingDetails: any = null;
+  projectFeatures: any;
 
   getData() {
-    this.url = 'getOnboardedPRojects'
-    this.columns = [
-      { field: '', header: 'S. No' },
-      { field: 'project_name', header: 'Project Name' },
-      { field: 'client_name', header: 'Client Name' },
-      { field: 'start_date', header: 'Start Date', pipe: 'date' },
-      { field: 'deadline', header: 'End Date', pipe: 'date' },
-      { field: 'priority', header: 'Priority' },
-      { field: 'action', header: 'Action', isEdit: true, isDelete: true, isView: true },
-    ]
-  }
+    this.url = `fetchProjectsByUser`
+    const params: any = {
+      page: this.currentPage.toString(),
+      limit: this.pageSize.toString(),
+    };
 
-
-  onSubmit() {
-    if (this.Form.invalid) {
-      this.Form.markAllAsTouched();
-      return
+    if (this.searchText !== '') {
+      params['search'] = this.searchText;
     }
-    this.service.postAPI('insertOnboardProjects', this.Form.value).subscribe((res: any) => {
-      if (res.success == true) {
-        this.toastr.success(res.message)
-        this.getData()
-        this.onModalCloseHandler(false)
-      } else {
-        this.toastr.warning(res.message)
-      }
-    },
-      (err: any) => {
-        this.toastr.error(err)
-      })
+    this.service.get<any[]>(this.url, params).subscribe((res: any) => {
+      this.pagedData = res.data || [];
+      this.totalRecords = res.totalRecords || 0;
+      this.isLoading = false
+    }, (err: any) => {
+      this.isLoading = false;
+      this.pagedData = [];
+    });
   }
 
-  onView(event: any) {
-    this.router.navigate([`/admin/projects/view/${event.id}`])
+  costingData: any;
+
+  onViewCosting(item: any) {
+    this.showCostingModal = true;
+    this.costingData = item;
   }
 
-  onEdit(event: any) {
-    console.log(event);
+  expandedIndex: number | null = null;
+
+  toggleDetails(index: number) {
+    if (this.expandedIndex === index) {
+      this.expandedIndex = null;
+    } else {
+      this.expandedIndex = index;
+    }
   }
 
-  onDelete(event: any) {
-    console.log(event);
+  checkRoute(route: string): string {
+    if (!route) return '-';
+
+    if (route.includes('make-it-mine')) {
+      return 'Feature Selection Screen';
+    }
+
+    if (route.includes('ai-preview')) {
+      return 'Ai Preview';
+    }
+
+    return '-';
   }
 
-  showModal: boolean = false;
-  openModal() {
-    this.showModal = !this.showModal;
+  parseData(data: any) {
+    return JSON.parse(data)
   }
 
-  onModalCloseHandler(event: any) {
-    this.showModal = event;
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.pageSize = this.pageSize,
+      // this.router.navigate([], {
+      //   relativeTo: this.route,
+      //   queryParams: {
+      //     page: this.currentPage,
+      //     pageSize: this.pageSize,
+      //   },
+      //   queryParamsHandling: 'merge',
+      // });
+
+      this.getData();
   }
+
+  getTotalPages(): number {
+    return Math.ceil(this.totalRecords / this.pageSize);
+  }
+
+  onPageSizeChange(event: any) {
+    const size = event.target.value;
+    this.pageSize = +size;
+    this.currentPage = 1;
+    this.getData();
+  }
+
+  getPageEnd(): number {
+    return Math.min(this.currentPage * this.pageSize, this.totalRecords);
+  }
+
+  search = debounce((event: any) => {
+    this.searchText = event.target.value.trim();
+    if (this.searchText.length > 0) {
+      this.currentPage = 1
+      this.getData();
+    }
+  }, 500);
 }

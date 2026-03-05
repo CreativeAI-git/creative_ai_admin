@@ -1,5 +1,5 @@
 <div class="relative">
-      <div class="absolute -top-11 right-28">
+      <div class="absolute -top-11" [ngClass]="isAddButton ? 'right-28' : 'right-0'">
             <input type="text" (input)="search($event)" placeholder="Search..."
                   class="search-input border border-gray-300 rounded-md px-2 py-1 focus:outline-none">
       </div>
@@ -14,6 +14,17 @@
                                                 [style.width]="col.width"
                                                 class="px-4 py-2 text-xs font-medium uppercase tracking-wider">
                                                 {{ col.header }}
+                                                <span *ngIf="col.sort" (click)="sort(col)"
+                                                      class="inline-flex flex-col ml-1 cursor-pointer">
+                                                      <i *ngIf="sortField === col.field && sortDirection === 'asc'"
+                                                            class="bi bi-arrow-up"></i>
+
+                                                      <i *ngIf="sortField === col.field && sortDirection === 'desc'"
+                                                            class="bi bi-arrow-down"></i>
+
+                                                      <i *ngIf="sortField !== col.field"
+                                                            class="bi bi-arrow-down-up text-gray-400"></i>
+                                                </span>
                                           </th>
                                     </tr>
                               </thead>
@@ -54,7 +65,7 @@
                                                       @if(row[col.field]== null){
                                                       {{ 'N/A' }}
                                                       }@else{
-                                                      {{ row[col.field] + ' ' + row[col.field2] || 'N/A' }}
+                                                      {{ row[col.field] + '' + row[col.field2] || 'N/A' }}
 
                                                       }
                                                 </ng-container>

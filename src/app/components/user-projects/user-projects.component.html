@@ -6,11 +6,117 @@
                   </div>
             </div>
             <div class="mt-3">
-                  <app-table [apiUrl]="url" [columns]="columns" [pageSizeOptions]="[5, 10, 20]"
+                  <app-table [isAddButton]="false" [apiUrl]="url" [columns]="columns" [pageSizeOptions]="[5, 10, 20]"
                         (viewClicked)="onView($event)" (dataGetter)="getResponse($event)"
                         (featureViewClicked)="onFeaturesView($event)"></app-table>
             </div>
-            <p class="p-2 bg-gray-200">Total Number of Users :{{totalLength}}</p>
-
+            <!-- <p class="p-2 bg-gray-200">Total Number of Users :{{totalLength}}</p> -->
       </div>
 </div>
+
+<div class="modal" role="dialog" [attr.aria-modal]="showViewModal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-wrapper">
+            <div class="modal-container">
+                  <div class="modal-box">
+                        <div class="bg-white p-6 sm:p-4 rounded shadow-md max-w-6xl w-full mx-auto relative">
+                              <button class="absolute top-2 right-2" (click)="showViewModal = false">
+                                    <i class="bi bi-x text-lg"></i>
+                              </button>
+                              <h1 class="text-xl font-bold text-[#2b2b2b] mb-2 text-center">User Details</h1>
+                              <hr class="mb-6">
+                              <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6">
+                                    <div class="bg-white border border-slate-200 rounded-xl p-6 text-center">
+                                          <div
+                                                class="w-24 h-24 mx-auto rounded-full overflow-hidden bg-slate-200 flex items-center justify-center">
+
+                                                <!-- If image exists -->
+                                                <img *ngIf="userData?.profile_image"
+                                                      [src]="imgUrl + userData.profile_image" alt="profile"
+                                                      class="w-full h-full object-cover">
+
+                                                <!-- If image not exists -->
+                                                <span *ngIf="!userData?.profile_image"
+                                                      class="text-2xl font-semibold text-slate-600">
+                                                      {{ getInitials(userData?.name) }}
+                                                </span>
+
+                                          </div>
+
+                                          <h3 class="mt-4 text-lg font-semibold text-slate-900">
+                                                {{userData?.name}}
+                                          </h3>
+
+                                          <p class="text-sm text-slate-500 mt-1">
+                                                {{userData?.email}}
+                                          </p>
+
+                                          <span
+                                                class="inline-block mt-3 px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                                                Active
+                                          </span>
+
+                                    </div>
+
+                                    <!-- Details -->
+                                    <div class="bg-white border border-slate-200 rounded-xl p-6">
+                                          <div class="mb-8">
+
+                                                <h4 class="text-sm font-semibold mb-4 text-slate-900">
+                                                      Basic Information
+                                                </h4>
+
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                                                      <div>
+                                                            <p class="text-xs text-slate-500 mb-1">Full Name</p>
+                                                            <p class="text-sm font-medium text-slate-900">
+                                                                  {{userData?.name}}
+                                                            </p>
+                                                      </div>
+
+                                                      <div>
+                                                            <p class="text-xs text-slate-500 mb-1">Phone</p>
+                                                            <p class="text-sm font-medium text-slate-900">
+                                                                  {{userData?.country_code}}{{userData?.phoneNumber}}
+                                                            </p>
+                                                      </div>
+                                                </div>
+                                          </div>
+
+                                          <!-- Account Details -->
+                                          <div>
+
+                                                <h4 class="text-sm font-semibold mb-4 text-slate-900">
+                                                      Account Details
+                                                </h4>
+
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                                                      <div>
+                                                            <p class="text-xs text-slate-500 mb-1">Member Since</p>
+                                                            <p class="text-sm font-medium text-slate-900">
+                                                                  {{userData?.createdAt | date:'MMM yyyy'}}
+                                                            </p>
+                                                      </div>
+
+                                                      <div>
+                                                            <p class="text-xs text-slate-500 mb-1">Last Login</p>
+                                                            <p class="text-sm font-medium text-slate-900">23 March 2026
+                                                            </p>
+                                                      </div>
+
+                                                      <div>
+                                                            <p class="text-xs text-slate-500 mb-1">Status</p>
+                                                            <p class="text-sm font-medium text-slate-900">
+                                                                  {{userData?.verified == 1 ? 'Verified' :
+                                                                  'Not Verified'}}</p>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>

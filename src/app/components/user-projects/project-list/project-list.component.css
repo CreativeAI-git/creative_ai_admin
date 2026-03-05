@@ -38,3 +38,8 @@
       white-space: nowrap;
       padding: 8px 15px;
 }
+
+.feature-div {
+      height: calc(100vh - 320px);
+      overflow: auto;
+}

@@ -15,9 +15,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class TableComponent {
   @Input() apiUrl!: string;
+  @Input() isAddButton?: boolean = true;
   @Input() columns: {
     field: string;
-    field2?:string ;
+    field2?: string;
     header: string;
     align?: string;
     width?: string;
@@ -30,7 +31,8 @@ export class TableComponent {
     isView?: boolean;
     isFeatures?: boolean;
     isAlbum?: boolean;
-    combine?:boolean
+    combine?: boolean;
+    sort?: boolean;
   }[] = [];
   @Input() pageSizeOptions: number[] = [10, 20, 25];
   @Input() projectId?: any
@@ -48,6 +50,8 @@ export class TableComponent {
   pageSize = this.pageSizeOptions[0];
   isLoading: boolean = true;
   searchQuery: string = ''
+  sortField: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
   constructor(private service: CommonService, private datePipe: DatePipe,
     private currencyPipe: CurrencyPipe, private modal: NzModalService, private router: Router, private route: ActivatedRoute) { }
 
@@ -83,7 +87,7 @@ export class TableComponent {
     }
 
     this.service.get<any[]>(this.apiUrl, params).subscribe((res: any) => {
-      
+
       this.pagedData = res.data || [];
       this.dataGetter.emit(this.pagedData)
       this.totalRecords = res.totalRecords || 0;
@@ -170,7 +174,7 @@ export class TableComponent {
 
   search = debounce((event: any) => {
     this.searchQuery = event.target.value.trim();
-    if(this.searchQuery.length > 0) {
+    if (this.searchQuery.length > 0) {
       this.currentPage = 1
       this.fetchData();
 
@@ -179,4 +183,46 @@ export class TableComponent {
     // this.fetchData();
   }, 500);
 
+
+  sort(col: any) {
+    if (!col.field || col.field === 'action') return;
+
+    if (this.sortField === col.field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = col.field;
+      this.sortDirection = 'asc';
+    }
+
+    this.applySorting();
+  }
+
+  applySorting() {
+
+    const direction = this.sortDirection === 'asc' ? 1 : -1;
+
+    this.pagedData.sort((a: any, b: any) => {
+
+      const valueA = a[this.sortField];
+      const valueB = b[this.sortField];
+
+      if (valueA == null) return -1 * direction;
+      if (valueB == null) return 1 * direction;
+
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return (valueA - valueB) * direction;
+      }
+
+      return valueA.toString().localeCompare(valueB.toString()) * direction;
+    });
+
+    // this.updatePagedData();
+  }
+
+  updatePagedData() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+
+    this.pagedData = this.pagedData.slice(start, end);
+  }
 }

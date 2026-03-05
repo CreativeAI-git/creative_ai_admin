@@ -13,6 +13,10 @@
     box-sizing: border-box;
   }
 
+  body {
+    background: #f4f6f9 !important;
+  }
+
   /* Text color */
   .text-light {
     @apply text-slate-400;
@@ -391,4 +395,18 @@
   /* text-sm */
   font-weight: 600 !important;
   margin: 0.5rem 0 !important;
+}
+
+a:hover {
+  color: white !important;
+}
+
+.chart-legend {
+  display: block !important;
+}
+
+.chart-legend .legend-labels {
+  text-align: center !important;
+  margin-top: 10px !important;
+  background: transparent !important;
 }
