@@ -33,6 +33,7 @@ export class TableComponent {
     isAlbum?: boolean;
     combine?: boolean;
     sort?: boolean;
+    color?: boolean;
   }[] = [];
   @Input() pageSizeOptions: number[] = [10, 20, 25];
   @Input() projectId?: any
