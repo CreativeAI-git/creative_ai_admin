@@ -158,6 +158,12 @@ export class ProjectListComponent {
   }
 
   parseData(data: any) {
-    return JSON.parse(data)
+    if (!data) return null;
+
+    try {
+      return JSON.parse(data);
+    } catch (error) {
+      return null;
+    }
   }
 }
