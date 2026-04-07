@@ -55,6 +55,20 @@
                   </div>
 
                   <div>
+                        <label for="blog_slug" class="block text-xs font-medium text-gray-700">
+                              Slug
+                        </label>
+                        <input type="text" id="blog_slug" formControlName="slug" class="form-control w-full"
+                              placeholder="Enter blog slug">
+                        <div *ngIf="Form.controls['slug'].invalid && Form.controls['slug'].touched"
+                              class="error-message">
+                              <div *ngIf="Form.controls['slug'].errors?.['required']" class="ct_fs_14 mt-1">
+                                    Blog slug is required.
+                              </div>
+                        </div>
+                  </div>
+
+                  <div>
                         <label for="post_date" class="block text-xs font-medium text-gray-700">
                               Post Date
                         </label>

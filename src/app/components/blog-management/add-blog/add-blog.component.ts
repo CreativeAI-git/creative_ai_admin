@@ -43,6 +43,7 @@ export class AddBlogComponent {
     this.editor1 = new Editor();
     this.Form = new FormGroup({
       title: new FormControl('', [Validators.required, NoWhitespaceDirective.validate]),
+      slug: new FormControl('', [Validators.required, NoWhitespaceDirective.validate]),
       description: new FormControl('', [Validators.required, NoWhitespaceDirective.validate]),
       post_date: new FormControl('', [Validators.required, NoWhitespaceDirective.validate]),
       text_editor: new FormControl('', [Validators.required, NoWhitespaceDirective.validate]),
@@ -100,6 +101,7 @@ export class AddBlogComponent {
       formData.append('id', this.blogId.toString())
       formData.append('text_editor', htmlContentAbout);
       formData.append('title', this.Form.value.title.trim())
+      formData.append('slug', this.Form.value.slug.trim())
       formData.append('description', this.Form.value.description.trim())
       formData.append('post_date', this.Form.value.post_date)
       if (this.LogoImage) {
@@ -110,6 +112,7 @@ export class AddBlogComponent {
       apiUrl = 'addBlogsCMS'
       formData.append('text_editor', htmlContentAbout)
       formData.append('title', this.Form.value.title.trim())
+      formData.append('slug', this.Form.value.slug.trim())
       formData.append('description', this.Form.value.description.trim())
       formData.append('post_date', this.Form.value.post_date)
       if (this.LogoImage) {
@@ -143,6 +146,7 @@ export class AddBlogComponent {
         if (resp.success) {
           this.Form.patchValue({
             title: resp.data[0].title,
+            slug: resp.data[0].slug || '',
             post_date: resp.data[0].post_date,
             text_editor: resp.data[0].text_editor,
             description: resp.data[0].description,
