@@ -60,32 +60,86 @@
                                     <!-- Expandable Row -->
                                     <tr *ngIf="expandedIndex === i">
                                           <td colspan="20" class="bg-gray-50 p-6">
-                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                      <div class="bg-white p-4 rounded-lg border md:col-span-2">
-                                                            <h4 class="font-semibold mb-2">User Prompt</h4>
-                                                            <p
-                                                                  class="text-sm text-gray-700 whitespace-pre-wrap break-words">
+                                                <div class="expanded-details">
+                                                      <div class="details-hero">
+                                                            <div>
+                                                                  <p class="details-eyebrow">Expanded Project Details
+                                                                  </p>
+                                                                  <h4 class="details-title">{{ item.clientProjectName ||
+                                                                        'Untitled Project' }}</h4>
+                                                            </div>
+                                                            <div class="details-badges">
+                                                                  <span class="detail-badge">
+                                                                        <i class="bi bi-bezier2"></i>
+                                                                        Variation {{ getDisplayValue(item.variation_no)
+                                                                        }}
+                                                                  </span>
+                                                                  <span class="detail-badge"
+                                                                        [ngClass]="item.react_build_url ? 'detail-badge-success' : 'detail-badge-muted'">
+                                                                        <i class="bi"
+                                                                              [ngClass]="item.react_build_url ? 'bi-link-45deg' : 'bi-slash-circle'"></i>
+                                                                        {{ item.react_build_url ? 'Build Available' :
+                                                                        'Build Unavailable' }}
+                                                                  </span>
+                                                            </div>
+                                                      </div>
+                                                      <div class="detail-card prompt-card">
+                                                            <div class="detail-card-header">
+                                                                  <div class="detail-icon">
+                                                                        <i class="bi bi-chat-left-text"></i>
+                                                                  </div>
+                                                                  <div>
+                                                                        <h5 class="detail-heading">User Prompt</h5>
+                                                                        <p class="detail-caption">Request
+                                                                              received from the user</p>
+                                                                  </div>
+                                                            </div>
+                                                            <p class="detail-value detail-prompt">
                                                                   {{ getDisplayValue(item.user_prompt) }}
                                                             </p>
                                                       </div>
-                                                      <div class="bg-white p-4 rounded-lg border">
-                                                            <h4 class="font-semibold mb-2">Build Preview URL</h4>
-                                                            <ng-container *ngIf="item.react_build_url; else noBuildUrl">
-                                                                  <a [href]="item.react_build_url" target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        class="text-sm text-indigo-600 break-all hover:underline">
-                                                                        {{ item.react_build_url }}
-                                                                  </a>
-                                                            </ng-container>
-                                                            <ng-template #noBuildUrl>
-                                                                  <p class="text-sm text-gray-700">N/A</p>
-                                                            </ng-template>
-                                                      </div>
-                                                      <div class="bg-white p-4 rounded-lg border">
-                                                            <h4 class="font-semibold mb-2">Variation Number</h4>
-                                                            <p class="text-sm text-gray-700">
-                                                                  {{ getDisplayValue(item.variation_no) }}
-                                                            </p>
+                                                      <div class="detail-grid">
+                                                            <div class="detail-card">
+                                                                  <div class="detail-card-header">
+                                                                        <div class="detail-icon">
+                                                                              <i class="bi bi-box-arrow-up-right"></i>
+                                                                        </div>
+                                                                        <div>
+                                                                              <h5 class="detail-heading">Build Preview
+                                                                                    URL</h5>
+                                                                              <p class="detail-caption">Open the latest
+                                                                                    generated build</p>
+                                                                        </div>
+                                                                  </div>
+                                                                  <ng-container
+                                                                        *ngIf="item.react_build_url; else noBuildUrl">
+                                                                        <a [href]="item.react_build_url" target="_blank"
+                                                                              rel="noopener noreferrer"
+                                                                              class="build-link">
+                                                                              {{ item.react_build_url }}
+                                                                        </a>
+                                                                  </ng-container>
+                                                                  <ng-template #noBuildUrl>
+                                                                        <p class="detail-value mb-0">N/A</p>
+                                                                  </ng-template>
+                                                            </div>
+                                                            <div class="detail-card">
+                                                                  <div class="detail-card-header">
+                                                                        <div class="detail-icon">
+                                                                              <i class="bi bi-diagram-3"></i>
+                                                                        </div>
+                                                                        <div>
+                                                                              <h5 class="detail-heading">Variation
+                                                                                    Number</h5>
+                                                                              <p class="detail-caption">Current
+                                                                                    generated variation for this project
+                                                                              </p>
+                                                                        </div>
+                                                                  </div>
+                                                                  <p class="detail-value detail-emphasis mb-0">
+                                                                        {{ getDisplayValue(item.variation_no) }}
+                                                                  </p>
+                                                            </div>
                                                       </div>
                                                 </div>
                                           </td>
