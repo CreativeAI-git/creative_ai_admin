@@ -38,6 +38,11 @@ export const routes: Routes = [
                         canActivate: [RoleGuard],
                   },
                   {
+                        path: 'project-details/:id',
+                        loadComponent: () => import('./components/projects/client-project-details/client-project-details.component').then(m => m.ClientProjectDetailsComponent),
+                        // canActivate: [RoleGuard],
+                  },
+                  {
                         path: 'user_buider_projects',
                         loadComponent: () => import('./components/user-projects/user-projects.component').then(m => m.UserProjectsComponent),
                         canActivate: [RoleGuard],
@@ -76,37 +81,6 @@ export const routes: Routes = [
                         path: 'builder-cms/project-details/:id',
                         loadComponent: () => import('./components/builderCMS/cms-projects/cms-project-details/cms-project-details.component').then(m => m.CmsProjectDetailsComponent),
                         // canActivate: [RoleGuard],
-                  },
-                  {
-                        path: 'projects/view/:id',
-                        loadComponent: () => import('./components/projects/project-details/main/main.component').then(m => m.MainComponent),
-                        children: [
-                              {
-                                    path: '',
-                                    redirectTo: 'overview',
-                                    pathMatch: 'full'
-                              },
-                              {
-                                    path: 'overview',
-                                    loadComponent: () => import('./components/projects/project-details/pro-overview/pro-overview.component').then(m => m.ProOverviewComponent),
-                              },
-                              {
-                                    path: 'tasks',
-                                    loadComponent: () => import('./components/projects/project-details/pro-tasks/pro-tasks.component').then(m => m.ProTasksComponent),
-                              },
-                              {
-                                    path: 'milestones',
-                                    loadComponent: () => import('./components/projects/project-details/pro-milestones/pro-milestones.component').then(m => m.ProMilestonesComponent),
-                              },
-                              {
-                                    path: 'timesheets',
-                                    loadComponent: () => import('./components/projects/project-details/pro-timesheets/pro-timesheets.component').then(m => m.ProTimesheetsComponent),
-                              },
-                              {
-                                    path: 'files',
-                                    loadComponent: () => import('./components/projects/project-details/pro-files/pro-files.component').then(m => m.ProFilesComponent),
-                              }
-                        ]
                   },
             ]
       }

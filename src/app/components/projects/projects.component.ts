@@ -4,11 +4,12 @@ import { CommonService } from '../../services/common.service';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment.development';
 import { debounce } from 'lodash';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, RouterLink],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css'
 })
@@ -16,9 +17,6 @@ export class ProjectsComponent {
   imageUrl = environment.imageUrl
   userId: any;
   url: string = ''
-  showBillingModal: boolean = false;
-  showCostingModal: boolean = false;
-  showFeaturesModal: boolean = false;
   searchText: string = '';
   pagedData: any[] = [];
   totalRecords = 0;
@@ -58,22 +56,6 @@ export class ProjectsComponent {
     });
   }
 
-  costingData: any;
-
-  onViewCosting(item: any) {
-    this.showCostingModal = true;
-    this.costingData = item;
-  }
-
-  expandedIndex: number | null = null;
-
-  toggleDetails(index: number) {
-    if (this.expandedIndex === index) {
-      this.expandedIndex = null;
-    } else {
-      this.expandedIndex = index;
-    }
-  }
 
   getDisplayValue(value: any): string {
     return value === null || value === undefined || value === '' ? 'N/A' : String(value);
