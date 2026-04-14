@@ -59,9 +59,7 @@
                         <!-- Expandable Row -->
                         <tr *ngIf="expandedIndex === i">
                             <td colspan="20" class="bg-gray-50 p-6">
-
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-
                                     <!-- Project Features -->
                                     <div class="bg-white p-4 rounded-lg border feature-div">
                                         <h4 class="font-semibold mb-3">Project Features</h4>
@@ -221,7 +219,7 @@
                                 <h3 class="text-lg font-semibold text-gray-800 mb-1">
                                     {{ feature.featureName }}
                                 </h3>
-                            
+
 
                                 <ul class="list-disc pl-5 text-sm text-gray-700">
                                     <li *ngFor="let sub of feature.subFeatures">
