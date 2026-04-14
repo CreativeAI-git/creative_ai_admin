@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-project-list',
   standalone: true,
-  imports: [CommonModule, NgxEditorModule, FormsModule],
+  imports: [CommonModule, NgxEditorModule, FormsModule, RouterLink],
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.css'
 })
@@ -22,9 +22,6 @@ export class ProjectListComponent {
   userId: any;
   columns: any[] = []
   url: string = ''
-  showBillingModal: boolean = false;
-  showCostingModal: boolean = false;
-  showFeaturesModal: boolean = false;
   searchText: string = '';
   filteredData: any[] = [];
 
@@ -86,61 +83,6 @@ export class ProjectListComponent {
       );
     }
     this.filteredData = filtered;
-  }
-
-  onViewBilling(billingDetails: any) {
-    this.showBillingModal = true;
-
-    try {
-      // If it's a stringified JSON, parse it
-      this.billingDetails = typeof billingDetails === 'string'
-        ? JSON.parse(billingDetails)
-        : billingDetails;
-    } catch {
-      // If parsing fails, just use as-is
-      this.billingDetails = billingDetails;
-    }
-
-    // If it's an array, pick the first one (based on your API structure)
-    if (Array.isArray(this.billingDetails)) {
-      this.billingDetails = this.billingDetails[0];
-    }
-
-    console.log('Billing details to show in modal:', this.billingDetails);
-  }
-
-
-  onViewFeatures(projectFeatures: any) {
-    this.showFeaturesModal = true; // open features modal
-
-    try {
-      // Parse if it's a stringified JSON
-      this.projectFeatures = typeof projectFeatures === 'string'
-        ? JSON.parse(projectFeatures)
-        : projectFeatures;
-    } catch {
-      // Fallback if parsing fails
-      this.projectFeatures = projectFeatures;
-    }
-
-    console.log('Project features to show in modal:', this.projectFeatures);
-  }
-
-  costingData: any;
-
-  onViewCosting(item: any) {
-    this.showCostingModal = true;
-    this.costingData = item;
-  }
-
-  expandedIndex: number | null = null;
-
-  toggleDetails(index: number) {
-    if (this.expandedIndex === index) {
-      this.expandedIndex = null;
-    } else {
-      this.expandedIndex = index;
-    }
   }
 
   getDisplayValue(value: any): string {
