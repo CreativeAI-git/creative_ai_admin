@@ -397,9 +397,9 @@
   margin: 0.5rem 0 !important;
 }
 
-a:hover {
+/* a:hover {
   color: white !important;
-}
+} */
 
 .chart-legend {
   display: block !important;

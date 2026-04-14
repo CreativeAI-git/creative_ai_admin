@@ -75,28 +75,8 @@ export class ProjectsComponent {
     }
   }
 
-  checkRoute(route: string): string {
-    if (!route) return '-';
-
-    if (route.includes('make-it-mine')) {
-      return 'Feature Selection Screen';
-    }
-
-    if (route.includes('ai-preview')) {
-      return 'Ai Preview';
-    }
-
-    return '-';
-  }
-
-  parseData(data: any) {
-    if (!data) return null;
-
-    try {
-      return JSON.parse(data);
-    } catch (error) {
-      return null;
-    }
+  getDisplayValue(value: any): string {
+    return value === null || value === undefined || value === '' ? 'N/A' : String(value);
   }
 
   onPageChange(page: number) {
