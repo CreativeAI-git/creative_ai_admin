@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { SubmitButtonComponent } from '../../shared/submit-button/submit-button.component';
 import { NgxEditorModule } from 'ngx-editor';
 import { TableComponent } from '../../shared/table/table.component';
@@ -25,7 +25,7 @@ export class ProjectListComponent {
   searchText: string = '';
   filteredData: any[] = [];
 
-  constructor(private service: CommonService, private toastr: NzMessageService, private router: Router, private route: ActivatedRoute) {
+  constructor(private service: CommonService, private toastr: NzMessageService, public location: Location, private route: ActivatedRoute) {
 
   }
 

@@ -53,13 +53,13 @@ export class ClientProjectDetailsComponent {
 
   getBuildStatusText(status: any): string {
     if (status === 1 || String(status) === '1') return 'Build Ready';
-    if (status === 0 || String(status) === '0') return 'Build Pending';
+    if (status === 0 || String(status) === '0') return 'Build Failed';
     return 'Build Failed';
   }
 
   getBuildStatusClasses(status: any): string {
     if (status === 1 || String(status) === '1') return 'text-emerald-700';
-    if (status === 0 || String(status) === '0') return 'text-sky-700';
+    if (status === 0 || String(status) === '0') return 'text-red-700';
     return 'text-red-700';
   }
 
