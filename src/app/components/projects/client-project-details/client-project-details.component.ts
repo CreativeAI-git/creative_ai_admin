@@ -15,6 +15,7 @@ export class ClientProjectDetailsComponent {
   projectData: any;
   templateHistory: any[] = [];
   isLoading: boolean = false;
+  expandedErrorReports: Record<string, boolean> = {};
 
   constructor(private route: ActivatedRoute, private service: CommonService, public location: Location) {
     this.route.paramMap.subscribe(params => {
@@ -75,6 +76,67 @@ export class ClientProjectDetailsComponent {
 
   getSuccessfulBuildCount(): number {
     return this.templateHistory.filter(template => template?.build_status === 1 || String(template?.build_status) === '1').length;
+  }
+
+  hasErrorReports(template: any): boolean {
+    return Array.isArray(template?.error_reports) && template.error_reports.length > 0;
+  }
+
+  getLatestErrorReport(template: any): any | null {
+    if (!this.hasErrorReports(template)) {
+      return null;
+    }
+
+    return this.getSortedErrorReports(template)[0];
+  }
+
+  getSortedErrorReports(template: any): any[] {
+    if (!this.hasErrorReports(template)) {
+      return [];
+    }
+
+    return [...template.error_reports].sort((a: any, b: any) =>
+      new Date(b?.created_at || 0).getTime() - new Date(a?.created_at || 0).getTime()
+    );
+  }
+
+  getErrorPreview(errorMessage: string | null | undefined): string {
+    if (!errorMessage) {
+      return 'No error details available.';
+    }
+
+    return errorMessage.length > 320 ? `${errorMessage.slice(0, 320)}...` : errorMessage;
+  }
+
+  getTemplateKey(template: any): string {
+    return String(template?.public_template_id || `${template?.variation_no || 'na'}-${template?.created_at || 'na'}`);
+  }
+
+  hasMoreErrorReports(template: any): boolean {
+    return this.getSortedErrorReports(template).length > 1;
+  }
+
+  isErrorReportsExpanded(template: any): boolean {
+    return !!this.expandedErrorReports[this.getTemplateKey(template)];
+  }
+
+  toggleErrorReports(template: any): void {
+    const templateKey = this.getTemplateKey(template);
+    this.expandedErrorReports[templateKey] = !this.expandedErrorReports[templateKey];
+  }
+
+  getRemainingErrorReports(template: any): any[] {
+    return this.getSortedErrorReports(template).slice(1);
+  }
+
+  getErrorToggleLabel(template: any): string {
+    const remainingCount = this.getRemainingErrorReports(template).length;
+
+    if (this.isErrorReportsExpanded(template)) {
+      return 'View Less';
+    }
+
+    return `View More (${remainingCount})`;
   }
 
   formatDate(value: string | null | undefined): string {

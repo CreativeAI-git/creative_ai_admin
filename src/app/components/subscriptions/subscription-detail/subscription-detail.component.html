@@ -1,198 +1,79 @@
-<div class="card p-5">
-  <div class="flex flex-col gap-4 border-b border-slate-200 pb-4 md:flex-row md:items-center md:justify-between">
-    <div class="card-title flex items-start gap-3">
-      <button
-        type="button"
-        class="mt-1 inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-300 bg-white text-slate-600 transition hover:border-[#1b83c1] hover:bg-slate-50 hover:text-[#1b83c1]"
-        (click)="location.back()">
-        <i class="bi bi-arrow-left text-sm"></i>
+<div class="subscription-page">
+  <div class="detail-shell">
+    <div class="detail-topbar">
+      <button type="button" class="back-button" (click)="location.back()">
+        <i class="bi bi-arrow-left"></i>
       </button>
-      <div>
-        <h3 class="mb-1 text-2xl font-bold leading-none text-slate-900">
-          {{ subscriptionData?.plan_name || 'Subscription Details' }}
-        </h3>
-        <p class="mb-0 text-sm text-slate-500">
-          Full subscription, billing, and payment information.
-        </p>
+
+      <div class="title-block">
+        <h3>{{ subscriptionData?.plan_name || 'Subscription Details' }}</h3>
+        <p class="subtitle mb-0">Monitor customer plan, billing cycle, and payment activity in one place.</p>
+      </div>
+
+      <div class="status-stack" *ngIf="subscriptionData">
+        <span class="status-pill" [ngClass]="getStatusClass(subscriptionData.subscription_status)">
+          {{ subscriptionData.subscription_status | titlecase }}
+        </span>
       </div>
     </div>
 
-    <div class="flex flex-wrap gap-2" *ngIf="subscriptionData">
-      <span class="status-pill" [ngClass]="getStatusClass(subscriptionData.subscription_status)">
-        {{ subscriptionData.subscription_status | titlecase }}
-      </span>
-      <span class="status-pill" [ngClass]="getPaymentStatusClass(subscriptionData.payment_status)">
-        {{ getDisplayValue(subscriptionData.payment_status) | titlecase }}
-      </span>
-    </div>
-  </div>
-
-  <div *ngIf="isLoading" class="state-box mt-6">
-    Loading subscription details...
-  </div>
-
-  <div *ngIf="!isLoading && errorMessage" class="state-box mt-6">
-    {{ errorMessage }}
-  </div>
-
-  <div *ngIf="!isLoading && subscriptionData" class="mt-6 space-y-6">
-    <div class="summary-grid">
-      <div class="summary-card">
-        <span class="summary-label">Customer</span>
-        <h4>{{ getDisplayValue(subscriptionData.user_name) }}</h4>
-        <p>{{ getDisplayValue(subscriptionData.user_email) }}</p>
-      </div>
-      <div class="summary-card">
-        <span class="summary-label">Plan Amount</span>
-        <h4>{{ getAmount(subscriptionData.plan_display_amount || subscriptionData.plan_amount) !== null ? (getAmount(subscriptionData.plan_display_amount || subscriptionData.plan_amount) | currency:'INR':'symbol':'1.0-0') : 'N/A' }}</h4>
-        <p>{{ getDisplayValue(subscriptionData.subscription_plan_type) | titlecase }} • {{ getDisplayValue(subscriptionData.billing_interval) | titlecase }}</p>
-      </div>
-      <div class="summary-card">
-        <span class="summary-label">Next Charge</span>
-        <h4>{{ subscriptionData.next_charge_date ? (subscriptionData.next_charge_date | date:'mediumDate') : 'N/A' }}</h4>
-        <p>Started {{ subscriptionData.start_date ? (subscriptionData.start_date | date:'mediumDate') : 'N/A' }}</p>
-      </div>
-      <div class="summary-card">
-        <span class="summary-label">Payment</span>
-        <h4>{{ getAmount(subscriptionData.payment_amount) !== null ? (getAmount(subscriptionData.payment_amount) | currency:'INR':'symbol':'1.0-0') : 'N/A' }}</h4>
-        <p>{{ getDisplayValue(subscriptionData.payment_method) | uppercase }}</p>
-      </div>
+    <div *ngIf="isLoading" class="state-box">
+      Loading subscription details...
     </div>
 
-    <div class="detail-section">
-      <div class="section-header">
-        <h4>Subscription Info</h4>
-      </div>
-      <div class="detail-grid">
-        <div class="detail-item">
-          <span>Subscription Row ID</span>
-          <strong>{{ subscriptionData.user_subscription_row_id }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>User ID</span>
-          <strong>{{ subscriptionData.user_id }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Subscription ID</span>
-          <strong>{{ getDisplayValue(subscriptionData.subscription_id) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Plan Key</span>
-          <strong>{{ getDisplayValue(subscriptionData.plan_key) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Plan Name</span>
-          <strong>{{ getDisplayValue(subscriptionData.plan_name) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>User Plan Type</span>
-          <strong>{{ getDisplayValue(subscriptionData.user_plan_type) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Discount</span>
-          <strong>{{ subscriptionData.discount_percent }}%</strong>
-        </div>
-        <div class="detail-item">
-          <span>Intro Offer</span>
-          <strong>{{ subscriptionData.is_intro ? 'Yes' : 'No' }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Intro Amount</span>
-          <strong>{{ getAmount(subscriptionData.intro_amount) !== null ? (getAmount(subscriptionData.intro_amount) | currency:'INR':'symbol':'1.0-0') : 'N/A' }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Created On</span>
-          <strong>{{ subscriptionData.subscription_created_at ? (subscriptionData.subscription_created_at | date:'medium') : 'N/A' }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Updated On</span>
-          <strong>{{ subscriptionData.subscription_updated_at ? (subscriptionData.subscription_updated_at | date:'medium') : 'N/A' }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Cycle Number</span>
-          <strong>{{ getDisplayValue(subscriptionData.cycle_number) }}</strong>
-        </div>
-      </div>
+    <div *ngIf="!isLoading && errorMessage" class="state-box">
+      {{ errorMessage }}
     </div>
 
-    <div class="detail-section">
-      <div class="section-header">
-        <h4>Payment Info</h4>
-      </div>
-      <div class="detail-grid">
-        <div class="detail-item">
-          <span>Payment Row ID</span>
-          <strong>{{ getDisplayValue(subscriptionData.payment_row_id) }}</strong>
+    <div *ngIf="!isLoading && subscriptionData" class="detail-content">
+      <section class="hero-card">
+        <div class="hero-left">
+          <div class="avatar-chip">{{ getCustomerInitials() }}</div>
+          <div>
+            <h4>{{ getDisplayValue(subscriptionData.user_name) }}</h4>
+            <p class="hero-subline mb-0">{{ getDisplayValue(subscriptionData.user_email) }}</p>
+            <p class="hero-meta"> Subscription ID: {{
+              getDisplayValue(subscriptionData.subscription_id) }}</p>
+          </div>
         </div>
-        <div class="detail-item">
-          <span>Payment Status</span>
-          <strong>{{ getDisplayValue(subscriptionData.payment_status) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Payment Amount</span>
-          <strong>{{ getAmount(subscriptionData.payment_amount) !== null ? (getAmount(subscriptionData.payment_amount) | currency:'INR':'symbol':'1.0-0') : 'N/A' }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Payment Currency</span>
-          <strong>{{ getDisplayValue(subscriptionData.payment_currency) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Payment Method</span>
-          <strong>{{ getDisplayValue(subscriptionData.payment_method) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Transaction ID</span>
-          <strong>{{ getDisplayValue(subscriptionData.transaction_id) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Gateway Payment ID</span>
-          <strong>{{ getDisplayValue(subscriptionData.gateway_payment_id) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Cashfree Payment ID</span>
-          <strong>{{ getDisplayValue(subscriptionData.cf_payment_id) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Cashfree Transaction ID</span>
-          <strong>{{ getDisplayValue(subscriptionData.cf_txn_id) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Cashfree Subscription ID</span>
-          <strong>{{ getDisplayValue(subscriptionData.cf_subscription_id) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>UPI ID</span>
-          <strong>{{ getDisplayValue(subscriptionData.upi_id) }}</strong>
-        </div>
-        <div class="detail-item">
-          <span>Payment Created At</span>
-          <strong>{{ subscriptionData.payment_created_at ? (subscriptionData.payment_created_at | date:'medium') : 'N/A' }}</strong>
-        </div>
-      </div>
-    </div>
 
-    <div class="detail-section">
-      <div class="section-header">
-        <h4>Card Info</h4>
-      </div>
-      <div class="detail-grid">
-        <div class="detail-item">
-          <span>Card Network</span>
-          <strong>{{ getDisplayValue(subscriptionData.card_network) }}</strong>
+        <div class="hero-right">
+          <div class="hero-stat">
+            <span>Plan Amount</span>
+            <strong>{{ getPlanAmount() !== null ? (getPlanAmount() | currency:'INR':'symbol':'1.0-0') : 'N/A'
+              }}</strong>
+            <small>{{ getPlanMeta() | titlecase }}</small>
+          </div>
+          <div class="hero-stat">
+            <span>Next Charge</span>
+            <strong>{{ subscriptionData.next_charge_date ? (subscriptionData.next_charge_date | date:'mediumDate') :
+              'N/A' }}</strong>
+            <small>Started {{ subscriptionData.start_date ? (subscriptionData.start_date | date:'mediumDate') : 'N/A'
+              }}</small>
+          </div>
         </div>
-        <div class="detail-item">
-          <span>Card Country</span>
-          <strong>{{ getDisplayValue(subscriptionData.card_country) }}</strong>
+      </section>
+
+      <section class="metric-grid">
+        <div class="metric-card">
+          <span class="metric-label">Plan Type</span>
+          <div class="metric-value">{{ getDisplayValue(subscriptionData.user_plan_type) }}</div>
         </div>
-        <div class="detail-item">
-          <span>Card Bank Name</span>
-          <strong>{{ getDisplayValue(subscriptionData.card_bank_name) }}</strong>
+        <div class="metric-card">
+          <span class="metric-label">Created On</span>
+          <div class="metric-value">{{ subscriptionData.subscription_created_at ?
+            (subscriptionData.subscription_created_at | date:'medium') : 'N/A' }}</div>
         </div>
-        <div class="detail-item">
-          <span>Card Number</span>
-          <strong>{{ getDisplayValue(subscriptionData.card_number) }}</strong>
+        <div class="metric-card">
+          <span class="metric-label">Billing Cycle</span>
+          <div class="metric-value">{{ getDisplayValue(subscriptionData.billing_interval) === 'MONTH' ? 'Monthly' :
+            'Yearly' }}</div>
         </div>
-      </div>
+        <div class="metric-card">
+          <span class="metric-label">Intro Offer</span>
+          <div class="metric-value">{{ subscriptionData.is_intro ? 'Yes' : 'No' }}</div>
+        </div>
+      </section>
     </div>
   </div>
 </div>

@@ -44,8 +44,11 @@ interface SubscriptionRow {
   transaction_id: string | null;
 }
 
-interface SubscriptionListResponse {
-  data: SubscriptionRow[];
+interface SubscriptionDetailResponse {
+  success: boolean;
+  status: number;
+  message: string;
+  data: SubscriptionRow | null;
 }
 
 @Component({
@@ -72,13 +75,6 @@ export class SubscriptionDetailComponent {
   }
 
   ngOnInit(): void {
-    const navigationState = history.state?.subscription as SubscriptionRow | undefined;
-
-    if (navigationState?.user_subscription_row_id) {
-      this.subscriptionData = navigationState;
-      return;
-    }
-
     this.getData();
   }
 
@@ -92,17 +88,15 @@ export class SubscriptionDetailComponent {
     this.errorMessage = '';
 
     const params = {
-      page: '1',
-      limit: '1',
-      row_id: String(this.subscriptionRowId)
+      id: String(this.subscriptionRowId)
     };
 
-    this.service.get<SubscriptionListResponse>('fetchAllUserSubscriptions', params).subscribe((res) => {
-      this.subscriptionData = res.data?.[0] || null;
+    this.service.get<SubscriptionDetailResponse>('fetchUserSubscriptionDetailById', params).subscribe((res) => {
+      this.subscriptionData = res?.data || null;
       this.isLoading = false;
 
       if (!this.subscriptionData) {
-        this.errorMessage = 'Subscription details could not be loaded.';
+        this.errorMessage = res?.message || 'Subscription details could not be loaded.';
       }
     }, (err: Error) => {
       this.isLoading = false;
@@ -132,17 +126,37 @@ export class SubscriptionDetailComponent {
     return 'status-pending';
   }
 
-  getPaymentStatusClass(status: string | null | undefined): string {
-    const normalizedStatus = String(status || '').toUpperCase();
+  getPlanAmount(): number | null {
+    return this.getAmount(this.subscriptionData?.plan_display_amount || this.subscriptionData?.plan_amount);
+  }
 
-    if (normalizedStatus === 'SUCCESS' || normalizedStatus === 'PAID' || normalizedStatus === 'CAPTURED' || normalizedStatus === 'AUTH') {
-      return 'payment-success';
+  getPaymentAmountValue(): number | null {
+    return this.getAmount(this.subscriptionData?.payment_amount);
+  }
+
+  getPlanMeta(): string {
+    if (!this.subscriptionData) {
+      return 'N/A';
     }
 
-    if (normalizedStatus === 'FAILED' || normalizedStatus === 'CANCELLED') {
-      return 'payment-failed';
+    return `${this.getDisplayValue(this.subscriptionData.subscription_plan_type)} • ${this.getDisplayValue(this.subscriptionData.billing_interval) === 'MONTH' ? 'Monthly' : 'Yearly'}`;
+  }
+
+  getPaymentMeta(): string {
+    if (!this.subscriptionData) {
+      return 'N/A';
     }
 
-    return 'payment-pending';
+    return `${this.getDisplayValue(this.subscriptionData.payment_method).toUpperCase()} • ${this.getDisplayValue(this.subscriptionData.payment_currency)} `;
+  }
+
+  getCustomerInitials(): string {
+    const name = this.subscriptionData?.user_name?.trim();
+    if (!name) {
+      return 'NA';
+    }
+
+    const parts = name.split(/\s+/).slice(0, 2);
+    return parts.map(part => part.charAt(0).toUpperCase()).join('');
   }
 }
