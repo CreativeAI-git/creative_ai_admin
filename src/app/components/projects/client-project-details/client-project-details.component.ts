@@ -11,11 +11,13 @@ import { CommonModule, Location } from '@angular/common';
   styleUrl: './client-project-details.component.css'
 })
 export class ClientProjectDetailsComponent {
+  readonly errorPreviewLimit = 320;
   projectId: any;
   projectData: any;
   templateHistory: any[] = [];
   isLoading: boolean = false;
   expandedErrorReports: Record<string, boolean> = {};
+  expandedErrorMessages: Record<string, boolean> = {};
 
   constructor(private route: ActivatedRoute, private service: CommonService, public location: Location) {
     this.route.paramMap.subscribe(params => {
@@ -105,11 +107,38 @@ export class ClientProjectDetailsComponent {
       return 'No error details available.';
     }
 
-    return errorMessage.length > 320 ? `${errorMessage.slice(0, 320)}...` : errorMessage;
+    return errorMessage.length > this.errorPreviewLimit ? `${errorMessage.slice(0, this.errorPreviewLimit)}...` : errorMessage;
   }
 
   getTemplateKey(template: any): string {
     return String(template?.public_template_id || `${template?.variation_no || 'na'}-${template?.created_at || 'na'}`);
+  }
+
+  getErrorMessageKey(template: any, errorReport: any): string {
+    return `${this.getTemplateKey(template)}-${errorReport?.attempt || 'na'}-${errorReport?.created_at || 'na'}`;
+  }
+
+  hasLongErrorMessage(errorMessage: string | null | undefined): boolean {
+    return !!errorMessage && errorMessage.length > this.errorPreviewLimit;
+  }
+
+  isErrorMessageExpanded(template: any, errorReport: any): boolean {
+    return !!this.expandedErrorMessages[this.getErrorMessageKey(template, errorReport)];
+  }
+
+  toggleErrorMessage(template: any, errorReport: any): void {
+    const errorKey = this.getErrorMessageKey(template, errorReport);
+    this.expandedErrorMessages[errorKey] = !this.expandedErrorMessages[errorKey];
+  }
+
+  getErrorMessageDisplay(template: any, errorReport: any): string {
+    const errorMessage = errorReport?.error_messages;
+
+    if (this.isErrorMessageExpanded(template, errorReport)) {
+      return errorMessage || 'No error details available.';
+    }
+
+    return this.getErrorPreview(errorMessage);
   }
 
   hasMoreErrorReports(template: any): boolean {
