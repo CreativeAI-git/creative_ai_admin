@@ -14,7 +14,7 @@
                         <thead class="bg-gray-50 sticky top-0">
                               <tr>
                                     <th>S No.</th>
-                                    <th>Project</th>
+                                    <th class="text-start">Project</th>
                                     <th>Client Name</th>
                                     <th>Deployed</th>
                                     <th>Created On</th>
@@ -35,7 +35,7 @@
                                     <!-- Main Row -->
                                     <tr>
                                           <td class="text-center">{{i+1}}</td>
-                                          <td class="text-center">{{item.clientProjectName || '-'}}</td>
+                                          <td class="">{{item.clientProjectName || '-'}}</td>
                                           <td class="text-center">{{item.name || '-'}}</td>
                                           <td class="text-center">{{item.deployed ? 'Yes' : 'No'}}</td>
                                           <td class="text-center">{{(item.createdAt | date) || '-'}}</td>
