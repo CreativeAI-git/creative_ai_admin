@@ -54,7 +54,7 @@ export class ClientProjectDetailsComponent {
   getBuildStatusText(status: any): string {
     if (status === 1 || String(status) === '1') return 'Build Ready';
     if (status === 0 || String(status) === '0') return 'Build Failed';
-    return 'Build Failed';
+    return 'Building in Progress';
   }
 
   getBuildStatusClasses(status: any): string {
