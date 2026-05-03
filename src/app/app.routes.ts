@@ -82,6 +82,11 @@ export const routes: Routes = [
                         loadComponent: () => import('./components/builderCMS/cms-projects/cms-project-details/cms-project-details.component').then(m => m.CmsProjectDetailsComponent),
                         // canActivate: [RoleGuard],
                   },
+                  {
+                        path: 'subscriptions',
+                        loadComponent: () => import('./components/subscriptions/subscription-list/subscription-list.component').then(m => m.SubscriptionListComponent),
+                        // canActivate: [RoleGuard],
+                  }
             ]
       }
 
