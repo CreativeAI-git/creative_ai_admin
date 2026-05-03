@@ -1,10 +1,6 @@
 .search-wrapper {
   margin-left: auto;
-}
-
-.search-input,
-.filter-input {
-  min-height: 38px;
+  width: min(100%, 320px);
 }
 
 .filter-grid {
@@ -56,6 +52,7 @@
 .cell-title {
   font-weight: 600;
   color: #111827;
+  line-height: 1.4;
 }
 
 .cell-subtitle {
@@ -66,22 +63,10 @@
   word-break: break-word;
 }
 
-th,
-td {
-  padding: 12px 10px;
+.ct_custom_table th,
+.ct_custom_table td {
   white-space: nowrap;
-  vertical-align: top;
-}
-
-thead th {
-  font-size: 12px;
-  font-weight: 700;
-  color: #4b5563;
-  text-transform: uppercase;
-}
-
-tbody td {
-  font-size: 13px;
+  padding: 8px 15px;
 }
 
 @media (max-width: 767px) {

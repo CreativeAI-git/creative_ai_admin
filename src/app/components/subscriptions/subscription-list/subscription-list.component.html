@@ -1,35 +1,19 @@
 <div class="card p-5">
-  <div class="flex justify-between items-center relative gap-4 flex-wrap">
+  <div class="flex justify-between items-center relative">
     <div class="card-title">
       <h3 class="text-xl font-bold leading-none">Subscriptions</h3>
     </div>
-    <div class="search-wrapper">
-      <input
-        type="text"
-        placeholder="Search by user, email or plan..."
-        [(ngModel)]="searchText"
-        (input)="search($event)"
+    <div class="absolute right-0">
+      <input type="text" placeholder="Search..." [(ngModel)]="searchText" (input)="search($event)"
         class="search-input border border-gray-300 rounded-md px-2 py-1 focus:outline-none">
     </div>
   </div>
 
-  <div class="filter-grid mt-4">
+  <!-- <div class="filter-grid mt-4">
     <select [(ngModel)]="statusFilter" class="filter-input border border-gray-300 rounded-md px-2 py-1">
       <option value="">All Status</option>
       <option *ngFor="let status of statusOptions" [value]="status">{{ status | titlecase }}</option>
     </select>
-
-    <input
-      type="text"
-      [(ngModel)]="planKeyFilter"
-      placeholder="Plan key"
-      class="filter-input border border-gray-300 rounded-md px-2 py-1">
-
-    <input
-      type="text"
-      [(ngModel)]="userIdFilter"
-      placeholder="User ID"
-      class="filter-input border border-gray-300 rounded-md px-2 py-1">
 
     <div class="flex gap-2">
       <button (click)="applyFilters()" class="px-3 py-1 rounded-md text-white bg-[#1b83c1] text-sm">
@@ -39,23 +23,20 @@
         Clear
       </button>
     </div>
-  </div>
+  </div> -->
 
   <div class="data-table mt-3">
     <div class="table-container ct_custom_table overflow-x-auto">
-      <table class="divide-y divide-gray-200 min-w-full">
+      <table class="divide-y divide-gray-200 min-w-full ">
         <thead class="bg-gray-50 sticky top-0">
           <tr>
-            <th>S No.</th>
-            <th>User</th>
-            <th>Plan</th>
-            <th>Billing</th>
-            <th>Amount</th>
-            <th>Start Date</th>
-            <th>Next Charge</th>
-            <th>Payment</th>
-            <th>Created On</th>
-            <th>Status</th>
+            <th class="text-start">S No.</th>
+            <th class="text-start">User</th>
+            <th class="text-start">Plan</th>
+            <th class="text-start">Amount</th>
+            <th class="text-start">Next Charge</th>
+            <th class="text-start">Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -79,46 +60,42 @@
 
           <ng-container *ngFor="let item of pagedData; let i = index">
             <tr *ngIf="!isLoading">
-              <td class="text-center">{{ ((currentPage - 1) * pageSize) + i + 1 }}</td>
-              <td class="text-center">
+              <td class="text-center font-medium">{{ ((currentPage - 1) * pageSize) + i + 1 }}</td>
+              <td>
                 <div class="cell-title">{{ getUserName(item) }}</div>
-                <div class="cell-subtitle">#{{ item.user_id }} • {{ getUserEmail(item) }}</div>
+                <div class="cell-subtitle">{{ getUserEmail(item) }}</div>
               </td>
-              <td class="text-center">
+              <td>
                 <div class="cell-title">{{ getPlanName(item) }}</div>
-                <div class="cell-subtitle">{{ getPlanKeyLabel(item) | titlecase }}</div>
+                <div class="cell-subtitle">
+                  {{ item.billing_interval === 'MONTH' ? 'Monthly' : 'Yearly' }}
+                </div>
               </td>
-              <td class="text-center">
-                <div class="cell-title">{{ item.subscription_plan_type | titlecase }}</div>
-                <div class="cell-subtitle">{{ item.billing_interval | titlecase }}</div>
-              </td>
-              <td class="text-center">
+              <td>
                 {{ getAmount(item) !== null ? (getAmount(item) | currency:'INR':'symbol':'1.0-0') : '-' }}
                 <div class="cell-subtitle" *ngIf="hasIntroOffer(item)">
                   Intro: {{ item.intro_amount ? (item.intro_amount | currency:'INR':'symbol':'1.0-0') : '-' }}
                 </div>
               </td>
-              <td class="text-center">{{ getStartDate(item) ? (getStartDate(item) | date:'mediumDate') : '-' }}</td>
-              <td class="text-center">
-                {{ getNextChargeDate(item) ? (getNextChargeDate(item) | date:'mediumDate') : '-' }}
-              </td>
-              <td class="text-center">
+              <td>
                 <div class="cell-title">
-                  {{ getPaymentAmount(item) !== null ? (getPaymentAmount(item) | currency:'INR':'symbol':'1.0-0') : '-' }}
+                  {{ getNextChargeDate(item) ? (getNextChargeDate(item) | date:'mediumDate') : '-' }}
                 </div>
-                <div class="cell-subtitle">{{ getPaymentMethod(item) }}</div>
-                <span class="status-pill mt-1" [ngClass]="getPaymentStatusClass(getPaymentStatus(item))">
-                  {{ getPaymentStatus(item) | titlecase }}
-                </span>
+                <div class="cell-subtitle">
+                  Started {{ getStartDate(item) ? (getStartDate(item) | date:'mediumDate') : '-' }}
+                </div>
               </td>
-              <td class="text-center">
-                <div class="cell-title">{{ getCreatedAt(item) ? (getCreatedAt(item) | date:'mediumDate') : '-' }}</div>
-                <div class="cell-subtitle">{{ item.subscription_id }}</div>
-              </td>
-              <td class="text-center">
+              <td>
                 <span class="status-pill" [ngClass]="getStatusClass(getStatus(item))">
                   {{ getStatus(item) | titlecase }}
                 </span>
+              </td>
+              <td class="text-center">
+                <a [routerLink]="getSubscriptionDetailLink(item)" [state]="{ subscription: item }"
+                  class="border border-[#1b83c1] rounded text-xs px-1 text-[#1b83c1] cursor-pointer"
+                  title="View Details">
+                  <i class="bi bi-eye"></i>
+                </a>
               </td>
             </tr>
           </ng-container>
@@ -140,33 +117,25 @@
     </div>
     <ul class="inline-flex space-x-1 mb-0">
       <li>
-        <button
-          [disabled]="currentPage === 1"
-          (click)="onPageChange(1)"
+        <button [disabled]="currentPage === 1" (click)="onPageChange(1)"
           class="px-3 py-1 border rounded-sm text-xs disabled:opacity-50">
           <i class="bi bi-chevron-double-left"></i>
         </button>
       </li>
       <li>
-        <button
-          [disabled]="currentPage === 1"
-          (click)="onPageChange(currentPage - 1)"
+        <button [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)"
           class="px-3 py-1 border rounded-sm text-xs disabled:opacity-50">
           <i class="bi bi-chevron-left"></i>
         </button>
       </li>
       <li>
-        <button
-          [disabled]="currentPage * pageSize >= totalRecords"
-          (click)="onPageChange(currentPage + 1)"
+        <button [disabled]="currentPage * pageSize >= totalRecords" (click)="onPageChange(currentPage + 1)"
           class="px-3 py-1 border rounded-sm text-xs disabled:opacity-50">
           <i class="bi bi-chevron-right"></i>
         </button>
       </li>
       <li>
-        <button
-          [disabled]="currentPage * pageSize >= totalRecords"
-          (click)="onPageChange(getTotalPages())"
+        <button [disabled]="currentPage * pageSize >= totalRecords" (click)="onPageChange(getTotalPages())"
           class="px-3 py-1 border rounded-sm text-xs disabled:opacity-50">
           <i class="bi bi-chevron-double-right"></i>
         </button>

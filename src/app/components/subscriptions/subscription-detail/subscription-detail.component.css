@@ -1,0 +1,142 @@
+.state-box {
+  border: 1px dashed #cbd5e1;
+  border-radius: 18px;
+  background: #f8fafc;
+  padding: 40px 24px;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.summary-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  padding: 18px;
+}
+
+.summary-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.summary-card h4 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.summary-card p {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.detail-section {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.section-header {
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 16px 20px;
+}
+
+.section-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0;
+}
+
+.detail-item {
+  padding: 18px 20px;
+  border-right: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.detail-item span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.detail-item strong {
+  color: #0f172a;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.status-active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-inactive {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.payment-success {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.payment-failed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.payment-pending {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+@media (max-width: 767px) {
+  .summary-card h4 {
+    font-size: 18px;
+  }
+
+  .detail-item {
+    border-right: 0;
+  }
+}

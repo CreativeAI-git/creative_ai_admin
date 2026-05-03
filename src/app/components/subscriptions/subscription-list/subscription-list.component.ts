@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { debounce } from 'lodash';
 import { CommonService } from '../../../services/common.service';
 
@@ -54,7 +55,7 @@ interface SubscriptionListResponse {
 @Component({
   selector: 'app-subscription-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './subscription-list.component.html',
   styleUrl: './subscription-list.component.css'
 })
@@ -62,8 +63,6 @@ export class SubscriptionListComponent {
   readonly statusOptions = ['ACTIVE', 'PENDING', 'CANCELLED', 'INACTIVE', 'EXPIRED'];
   searchText = '';
   statusFilter = '';
-  planKeyFilter = '';
-  userIdFilter = '';
   pagedData: SubscriptionRow[] = [];
   totalRecords = 0;
   currentPage = 1;
@@ -95,14 +94,6 @@ export class SubscriptionListComponent {
 
     if (this.statusFilter !== '') {
       params['status'] = this.statusFilter;
-    }
-
-    if (this.planKeyFilter !== '') {
-      params['plan_key'] = this.planKeyFilter.trim();
-    }
-
-    if (this.userIdFilter !== '') {
-      params['user_id'] = this.userIdFilter.trim();
     }
 
     this.service.get<SubscriptionListResponse>('fetchAllUserSubscriptions', params).subscribe((res) => {
@@ -149,8 +140,6 @@ export class SubscriptionListComponent {
   clearFilters() {
     this.searchText = '';
     this.statusFilter = '';
-    this.planKeyFilter = '';
-    this.userIdFilter = '';
     this.currentPage = 1;
     this.getData();
   }
@@ -202,9 +191,6 @@ export class SubscriptionListComponent {
     return item.payment_amount ? Number(item.payment_amount) : null;
   }
 
-  getPaymentStatus(item: SubscriptionRow): string {
-    return item.payment_status || 'Unpaid';
-  }
 
   getPaymentMethod(item: SubscriptionRow): string {
     return item.payment_method ? item.payment_method.toUpperCase() : '-';
@@ -240,5 +226,9 @@ export class SubscriptionListComponent {
     }
 
     return 'payment-pending';
+  }
+
+  getSubscriptionDetailLink(item: SubscriptionRow): string {
+    return `/admin/subscriptions/${item.user_subscription_row_id}`;
   }
 }

@@ -86,6 +86,11 @@ export const routes: Routes = [
                         path: 'subscriptions',
                         loadComponent: () => import('./components/subscriptions/subscription-list/subscription-list.component').then(m => m.SubscriptionListComponent),
                         // canActivate: [RoleGuard],
+                  },
+                  {
+                        path: 'subscriptions/:id',
+                        loadComponent: () => import('./components/subscriptions/subscription-detail/subscription-detail.component').then(m => m.SubscriptionDetailComponent),
+                        // canActivate: [RoleGuard],
                   }
             ]
       }
