@@ -34,6 +34,7 @@ export class TableComponent {
     combine?: boolean;
     sort?: boolean;
     color?: boolean;
+    isClickable?: boolean;
   }[] = [];
   @Input() pageSizeOptions: number[] = [10, 20, 25];
   @Input() projectId?: any

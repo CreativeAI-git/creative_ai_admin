@@ -70,6 +70,13 @@
                                                       }
                                                 </ng-container>
 
+                                                <ng-container *ngIf="col.isClickable && col.field">
+                                                      <a href="{{row[col.field]}}" target="_blank"
+                                                            class="text-blue-600 hover:underline">
+                                                            {{ row[col.field] }}
+                                                      </a>
+                                                </ng-container>
+
                                                 <!-- Pipe applied -->
                                                 <ng-container *ngIf="col.field && col.pipe">
                                                       {{ applyPipe(row[col.field], col.pipe) }}
@@ -82,16 +89,16 @@
 
                                                 <!-- Normal field display -->
                                                 <p class="mb-0"
-                                                      *ngIf="col.field && !col.color && !col.pipe && !col.isArray && !col.combine  && col.field !== 'action'"
+                                                      *ngIf="col.field && !col.color && !col.pipe && !col.isArray && !col.combine && !col.isClickable && col.field !== 'action'"
                                                       [ngClass]="col.addClass">
                                                       {{ row[col.field] || 'N/A' }}
                                                 </p>
                                                 <!-- Color field display -->
                                                 <p class="mb-0"
-                                                      *ngIf="col.field && col.color && !col.pipe && !col.isArray && !col.combine  && col.field !== 'action'"
+                                                      *ngIf="col.field && col.color && !col.pipe && !col.isArray && !col.combine && !col.isClickable  && col.field !== 'action'"
                                                       [ngClass]="col.addClass" [ngStyle]="{ 
                                                             'color': row[col.field] === 'YES' ? 'green' : 'red' 
-                                                          }" >
+                                                          }">
                                                       {{ row[col.field ] || 'N/A' }}
                                                 </p>
 

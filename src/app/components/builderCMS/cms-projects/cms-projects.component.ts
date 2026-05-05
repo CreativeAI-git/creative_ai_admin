@@ -52,6 +52,7 @@ export class CmsProjectsComponent {
       { field: '', header: 'S. No' },
       { field: 'projectName', header: 'Project Name' },
       { field: 'description', header: 'Description', addClass: 'w-[38rem] text-ellipsis overflow-hidden whitespace-nowrap' },
+      { field: 'liveUrl', header: 'Live URL', isClickable: true },
       { field: 'action', header: 'Action', isEdit: true, isDelete: true, isView: true, isAlbum: true, isFeatures: true },
     ]
   }
