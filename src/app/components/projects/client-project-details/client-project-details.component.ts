@@ -12,6 +12,7 @@ import { CommonModule, Location } from '@angular/common';
 })
 export class ClientProjectDetailsComponent {
   readonly errorPreviewLimit = 320;
+  readonly customizationPreviewLimit = 220;
   projectId: any;
   projectData: any;
   templateHistory: any[] = [];
@@ -82,6 +83,30 @@ export class ClientProjectDetailsComponent {
 
   hasErrorReports(template: any): boolean {
     return Array.isArray(template?.error_reports) && template.error_reports.length > 0;
+  }
+
+  hasCustomizationReports(template: any): boolean {
+    return Array.isArray(template?.customization_reports) && template.customization_reports.length > 0;
+  }
+
+  getSortedCustomizationReports(template: any): any[] {
+    if (!this.hasCustomizationReports(template)) {
+      return [];
+    }
+
+    return [...template.customization_reports].sort((a: any, b: any) =>
+      new Date(b?.created_at || 0).getTime() - new Date(a?.created_at || 0).getTime()
+    );
+  }
+
+  getCustomizationPromptPreview(prompt: string | null | undefined): string {
+    if (!prompt) {
+      return 'No customization prompt available.';
+    }
+
+    return prompt.length > this.customizationPreviewLimit
+      ? `${prompt.slice(0, this.customizationPreviewLimit)}...`
+      : prompt;
   }
 
   getLatestErrorReport(template: any): any | null {

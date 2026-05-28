@@ -45,3 +45,13 @@
   color: #92400e;
   text-decoration: underline;
 }
+
+.ct_customization_prompt {
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #dbeafe;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #1e293b;
+}
